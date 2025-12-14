@@ -116,6 +116,7 @@ content="width=device-width,initial-scale=1.0">
                             <li class="nav-item"><a class="nav-link" href="#section2">工作經歷</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section3">串珠展示</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section4">音樂作品</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#section8">專案/作品集</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section5">美食分享</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section6">展覽分享</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section7">更多資訊</a></li>
@@ -250,7 +251,20 @@ content="width=device-width,initial-scale=1.0">
                         </em>
                     </p>
                 </article>
-
+                <article id="section8" class="mb-5 p-4 bg-white rounded-3 shadow-sm">
+                    <h2>專案/作品集</h2>
+                    <!-- 修正：將 a 標籤移到 <p> 內，並修正連結樣式 -->
+                    <p class="mb-3">
+                        <a href="https://www.youtube.com/watch?v=ou-M5ehu7f0" class="text-sharon-dark fw-bold">結合ＡＩ工具製作的廣告作品</a>
+                    </p>
+                    
+                    <!-- 替換為 Click-to-Play 結構，顯示縮圖並添加 onclick 事件 -->
+                    <div id="video-wrapper" class="ratio ratio-16x9 mb-4 rounded-3 shadow-md video-placeholder" data-video-id="ou-M5ehu7f0" onclick="loadYouTubeVideo('video-wrapper')">
+                        <!-- 預設顯示 YouTube 縮圖 -->
+                        <img src="https://img.youtube.com/vi/ou-M5ehu7f0/hqdefault.jpg" alt="YouTube 影片縮圖" class="img-fluid rounded-3">
+                        <div class="play-button"></div>
+                    </div>
+                </article>
                 <article id="section5" class="mb-5 p-4 bg-white rounded-3 shadow-sm">
                     <h2>美食分享</h2>
                     <div class="row row-cols-2 row-cols-md-4 g-3 text-center">
@@ -258,13 +272,13 @@ content="width=device-width,initial-scale=1.0">
                             <img src="assets/images/regent.jpg" alt="聖誕樹冰淇淋" class="img-fluid rounded-3 shadow-md hover-scale" >
                         </div>
                         <div class="col">
-                            <img src="assets/images/c1.jpg" alt="聖誕樹冰淇淋" class="img-fluid rounded-3 shadow-md hover-scale" >
+                            <img src="assets/images/c1.jpg" alt="超好吃可麗餅1" class="img-fluid rounded-3 shadow-md hover-scale" >
                         </div>
                         <div class="col">
-                            <img src="assets/images/gelato.jpg" alt="聖誕樹冰淇淋" class="img-fluid rounded-3 shadow-md hover-scale" >
+                            <img src="assets/images/gelato.jpg" alt="義式冰淇淋" class="img-fluid rounded-3 shadow-md hover-scale" >
                         </div>
                         <div class="col">
-                            <img src="assets/images/c2.jpg" alt="聖誕樹冰淇淋" class="img-fluid rounded-3 shadow-md hover-scale" >
+                            <img src="assets/images/c2.jpg" alt="超好吃可麗餅2" class="img-fluid rounded-3 shadow-md hover-scale" >
                         </div>
                     </div>
                 </article>
@@ -319,6 +333,36 @@ content="width=device-width,initial-scale=1.0">
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script> 
+        <!-- 新增：影片載入的 JavaScript 邏輯 -->
+        <script>
+            /**
+             * 點擊縮圖後，動態載入 YouTube 播放器
+             * @param {string} wrapperId - 影片容器的 ID
+             */
+            function loadYouTubeVideo(wrapperId) {
+                const wrapper = document.getElementById(wrapperId);
+                // 檢查是否已載入，避免重複操作
+                if (!wrapper || wrapper.getAttribute('data-loaded')) return;
+    
+                const videoId = wrapper.getAttribute('data-video-id');
+                const iframe = document.createElement('iframe');
+                
+                // 設定 iframe 屬性，並加上 autoplay=1 讓影片自動播放
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                iframe.title = 'YouTube video player';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                iframe.allowFullscreen = true;
+                iframe.classList.add('embed-responsive-item', 'rounded-3'); // 繼承 Bootstrap 的響應式樣式
+    
+                // 清空容器內容 (移除縮圖和按鈕) 並插入 iframe
+                wrapper.innerHTML = '';
+                wrapper.appendChild(iframe);
+                
+                wrapper.setAttribute('data-loaded', 'true');
+                wrapper.onclick = null; // 移除點擊事件
+            }
+        </script>
 
 </body>
 </html>
