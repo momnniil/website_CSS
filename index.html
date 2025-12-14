@@ -9,11 +9,6 @@ content="width=device-width,initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
    
   <style>
-    /* 啟用平滑滾動 */
-    html {
-        scroll-behavior: smooth; 
-    }
-    
     /* 定義一個客製化的深藍綠色系 (Deep Teal Palette) */
     :root {
       --sharon-teal-dark: #00796b; /* 主強調色：深青色 (用於 Nav/Footer/Fact Card) */
@@ -146,8 +141,7 @@ content="width=device-width,initial-scale=1.0">
 </head>
 
 <body>
-    <!-- 加上 id="top" 作為「首頁」的錨點目標 -->
-    <div class="container-fluid py-4" id="top"> 
+    <div class="container-fluid py-4">
         
         <header>
             <!-- 標題：使用 text-dark 確保對比度 -->
@@ -161,8 +155,8 @@ content="width=device-width,initial-scale=1.0">
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav fs-5"> 
-                            <!-- 調整：連結到 #top 以實現平滑滾動回頁面頂端 -->
-                            <li class="nav-item"><a class="nav-link fw-bold" href="#top">首頁</a></li>
+                            <!-- 新增/調整主要導覽項目 -->
+                            <li class="nav-item"><a class="nav-link fw-bold" href="#">首頁</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section1">關於我</a></li>
                             <li class="nav-item"><a class="nav-link" href="#contact">聯絡我</a></li>
                             
