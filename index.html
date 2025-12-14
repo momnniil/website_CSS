@@ -9,6 +9,11 @@ content="width=device-width,initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
    
   <style>
+    /* 啟用平滑滾動 */
+    html {
+        scroll-behavior: smooth; 
+    }
+    
     /* 定義一個客製化的深藍綠色系 (Deep Teal Palette) */
     :root {
       --sharon-teal-dark: #00796b; /* 主強調色：深青色 (用於 Nav/Footer/Fact Card) */
@@ -71,6 +76,49 @@ content="width=device-width,initial-scale=1.0">
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
     }
 
+    /* --- 影片點擊播放按鈕樣式 (RWD) --- */
+    .video-placeholder {
+        position: relative;
+        cursor: pointer;
+    }
+    .video-placeholder img {
+        display: block;
+        transition: opacity 0.3s;
+        object-fit: cover; /* 確保圖片填滿容器 */
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .video-placeholder:hover img {
+        opacity: 0.8;
+    }
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 55px;
+        background-color: rgba(255, 0, 0, 0.85); /* YouTube Red */
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+        z-index: 10;
+    }
+    .play-button::before {
+        content: '';
+        border-style: solid;
+        border-width: 14px 0 14px 22px;
+        border-color: transparent transparent transparent #fff;
+        margin-left: 5px; /* Adjust triangle position */
+    }
+    .video-placeholder:hover .play-button {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    /* --- 結束：影片點擊播放按鈕樣式 --- */
+
     /* 手機樣式 (小於 768px) */
     @media (max-width: 767px) { 
       body {
@@ -98,7 +146,8 @@ content="width=device-width,initial-scale=1.0">
 </head>
 
 <body>
-    <div class="container-fluid py-4">
+    <!-- 加上 id="top" 作為「首頁」的錨點目標 -->
+    <div class="container-fluid py-4" id="top"> 
         
         <header>
             <!-- 標題：使用 text-dark 確保對比度 -->
@@ -112,7 +161,12 @@ content="width=device-width,initial-scale=1.0">
                     </button>
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav fs-5"> 
+                            <!-- 調整：連結到 #top 以實現平滑滾動回頁面頂端 -->
+                            <li class="nav-item"><a class="nav-link fw-bold" href="#top">首頁</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section1">關於我</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#contact">聯絡我</a></li>
+                            
+                            <!-- 詳細內容區塊 -->
                             <li class="nav-item"><a class="nav-link" href="#section2">工作經歷</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section3">串珠展示</a></li>
                             <li class="nav-item"><a class="nav-link" href="#section4">音樂作品</a></li>
@@ -251,6 +305,7 @@ content="width=device-width,initial-scale=1.0">
                         </em>
                     </p>
                 </article>
+
                 <article id="section8" class="mb-5 p-4 bg-white rounded-3 shadow-sm">
                     <h2>專案/作品集</h2>
                     <!-- 修正：將 a 標籤移到 <p> 內，並修正連結樣式 -->
@@ -265,6 +320,7 @@ content="width=device-width,initial-scale=1.0">
                         <div class="play-button"></div>
                     </div>
                 </article>
+
                 <article id="section5" class="mb-5 p-4 bg-white rounded-3 shadow-sm">
                     <h2>美食分享</h2>
                     <div class="row row-cols-2 row-cols-md-4 g-3 text-center">
@@ -325,44 +381,45 @@ content="width=device-width,initial-scale=1.0">
             </div>
         </main>
         
-        <!-- 頁腳：使用客製化深青色背景，並加上陰影 -->
-        <footer class="text-center py-3 mt-4 bg-sharon-dark text-white rounded-3 shadow-lg"> 
+        <!-- 頁腳：新增 id="contact" 作為聯絡我的目標錨點 -->
+        <footer id="contact" class="text-center py-3 mt-4 bg-sharon-dark text-white rounded-3 shadow-lg"> 
             <p class="mb-1">合作邀約：S111216040@stu.ntue.edu.tw</p>
             <time datetime="2026-2-30" class="small">最後更新日期：2026年2月30日</time>
         </footer>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script> 
-        <!-- 新增：影片載入的 JavaScript 邏輯 -->
-        <script>
-            /**
-             * 點擊縮圖後，動態載入 YouTube 播放器
-             * @param {string} wrapperId - 影片容器的 ID
-             */
-            function loadYouTubeVideo(wrapperId) {
-                const wrapper = document.getElementById(wrapperId);
-                // 檢查是否已載入，避免重複操作
-                if (!wrapper || wrapper.getAttribute('data-loaded')) return;
-    
-                const videoId = wrapper.getAttribute('data-video-id');
-                const iframe = document.createElement('iframe');
-                
-                // 設定 iframe 屬性，並加上 autoplay=1 讓影片自動播放
-                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                iframe.title = 'YouTube video player';
-                iframe.frameBorder = '0';
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-                iframe.allowFullscreen = true;
-                iframe.classList.add('embed-responsive-item', 'rounded-3'); // 繼承 Bootstrap 的響應式樣式
-    
-                // 清空容器內容 (移除縮圖和按鈕) 並插入 iframe
-                wrapper.innerHTML = '';
-                wrapper.appendChild(iframe);
-                
-                wrapper.setAttribute('data-loaded', 'true');
-                wrapper.onclick = null; // 移除點擊事件
-            }
-        </script>
+
+    <!-- 新增：影片載入的 JavaScript 邏輯 -->
+    <script>
+        /**
+         * 點擊縮圖後，動態載入 YouTube 播放器
+         * @param {string} wrapperId - 影片容器的 ID
+         */
+        function loadYouTubeVideo(wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            // 檢查是否已載入，避免重複操作
+            if (!wrapper || wrapper.getAttribute('data-loaded')) return;
+
+            const videoId = wrapper.getAttribute('data-video-id');
+            const iframe = document.createElement('iframe');
+            
+            // 設定 iframe 屬性，並加上 autoplay=1 讓影片自動播放
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            iframe.title = 'YouTube video player';
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            iframe.allowFullscreen = true;
+            iframe.classList.add('embed-responsive-item', 'rounded-3'); // 繼承 Bootstrap 的響應式樣式
+
+            // 清空容器內容 (移除縮圖和按鈕) 並插入 iframe
+            wrapper.innerHTML = '';
+            wrapper.appendChild(iframe);
+            
+            wrapper.setAttribute('data-loaded', 'true');
+            wrapper.onclick = null; // 移除點擊事件
+        }
+    </script>
 
 </body>
 </html>
